@@ -5,44 +5,71 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hearts Game 💘</title>
     <style>
-        body {
-            background: linear-gradient(135deg, #ff6b6b, #ffa8a8);
-            text-align: center;
-            font-family: 'Comic Sans MS', cursive;
+        * {
             margin: 0;
-            overflow: hidden;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #ff6b6b, #ffa8a8);
+            min-height: 100vh;
+            text-align: center;
+            overflow-x: hidden;
+            padding: 20px;
         }
         .game-container {
+            max-width: 800px;
+            margin: 0 auto;
             padding: 20px;
         }
         h1 {
             color: white;
             font-size: 2.5rem;
-            text-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+            text-shadow: 3px 3px 5px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+        }
+        .game-info {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 15px;
+            border-radius: 15px;
+            display: inline-block;
+            margin: 10px auto;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
         #timer {
             font-size: 2rem;
-            color: yellow;
+            color: #ff4757;
+            font-weight: bold;
             margin: 10px;
         }
         #score {
             font-size: 1.5rem;
-            color: white;
+            color: #3742fa;
         }
         #hearts-container {
             position: relative;
-            height: 70vh;
-            margin-top: 20px;
+            height: 60vh;
+            margin: 30px auto;
+            border: 3px dashed white;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            overflow: hidden;
         }
         .heart {
             position: absolute;
-            font-size: 2.5rem;
+            font-size: 3rem;
             cursor: pointer;
             user-select: none;
-            transition: transform 0.2s;
+            transition: transform 0.2s, opacity 0.3s;
+            animation: float 3s infinite ease-in-out;
         }
         .heart:hover {
-            transform: scale(1.2);
+            transform: scale(1.3);
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(10deg); }
         }
         #message {
             display: none;
@@ -52,26 +79,71 @@
             max-width: 600px;
             margin: 30px auto;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            animation: fadeIn 1s;
         }
         #message h2 {
             color: #ff4d94;
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+        }
+        .win-message {
+            font-size: 1.3rem;
+            line-height: 1.8;
+            color: #555;
+        }
+        .celebration {
+            font-size: 4rem;
+            margin: 20px 0;
+            animation: bounce 1s infinite;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .back-btn {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 12px 25px;
+            background: #3742fa;
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        .back-btn:hover {
+            background: #2f3542;
+            transform: translateY(-3px);
         }
     </style>
 </head>
 <body>
     <div class="game-container">
-        <h1>Click 10 Hearts in 10 Seconds! 💖</h1>
-        <div id="timer">Time: <span id="time">10</span>s</div>
-        <div id="score">Hearts Clicked: <span id="count">0</span> / 10</div>
+        <h1>💖 Catch the Hearts! 💖</h1>
+        
+        <div class="game-info">
+            <div id="timer">⏰ Time: <span id="time">10</span>s</div>
+            <div id="score">💕 Hearts: <span id="count">0</span> / 10</div>
+        </div>
+        
         <div id="hearts-container"></div>
+        
         <div id="message">
-            <h2>Yay! You did it! 🎉</h2>
-            <p style="font-size: 1.2rem;">
-                Thank you, Haram, for saying YES! <br>
-                You've just made me the happiest person in the world. <br>
-                I promise to always cherish and love you. 💕<br><br>
-                Forever yours... ❤️
-            </p>
+            <div class="celebration">🎉🎊🥳</div>
+            <h2>Congratulations! 💝</h2>
+            <div class="win-message">
+                <p>Thank you, Haram, for saying YES! 💌</p>
+                <p>You've just made me the happiest person in the world. 🌎</p>
+                <p>I promise to cherish every moment with you, to support your dreams, 
+                and to love you more with each passing day. 💕</p>
+                <p>This is just the beginning of our beautiful journey together. ✨</p>
+                <p>With all my love, forever and always... ❤️</p>
+            </div>
+            <a href="index.html" class="back-btn">Back to Home</a>
         </div>
     </div>
 
@@ -84,28 +156,34 @@
         let timeLeft = 10;
         let gameActive = true;
 
-        // Create floating hearts
+        // Create hearts
         function createHeart() {
             const heart = document.createElement('div');
             heart.classList.add('heart');
             heart.innerHTML = '💖';
-            heart.style.left = Math.random() * 90 + '%';
-            heart.style.top = Math.random() * 80 + '%';
+            heart.style.left = Math.random() * 85 + '%';
+            heart.style.top = Math.random() * 75 + '%';
+            heart.style.animationDelay = Math.random() * 2 + 's';
+            
             heart.onclick = () => {
                 if (!gameActive) return;
                 score++;
                 countDisplay.textContent = score;
-                heart.style.opacity = '0.5';
+                heart.style.opacity = '0.3';
                 heart.style.pointerEvents = 'none';
+                heart.style.transform = 'scale(0.5)';
+                
+                // Play sound effect (optional)
                 if (score >= 10) {
                     winGame();
                 }
             };
+            
             heartsContainer.appendChild(heart);
         }
 
-        // Create multiple hearts
-        for (let i = 0; i < 20; i++) {
+        // Create 25 hearts
+        for (let i = 0; i < 25; i++) {
             createHeart();
         }
 
@@ -113,11 +191,16 @@
         const timer = setInterval(() => {
             timeLeft--;
             timeDisplay.textContent = timeLeft;
+            
+            if (timeLeft <= 5) {
+                timeDisplay.style.color = '#ff0000';
+            }
+            
             if (timeLeft <= 0) {
                 clearInterval(timer);
                 gameActive = false;
                 if (score < 10) {
-                    alert("Time's up! Let's try again? ❤️");
+                    alert("⏰ Time's up! Let's try again? ❤️");
                     location.reload();
                 }
             }
@@ -127,12 +210,46 @@
         function winGame() {
             gameActive = false;
             clearInterval(timer);
+            
+            // Celebration animation
+            heartsContainer.style.opacity = '0.5';
             document.querySelector('h1').style.display = 'none';
-            document.getElementById('timer').style.display = 'none';
-            document.getElementById('score').style.display = 'none';
-            heartsContainer.style.display = 'none';
-            messageDiv.style.display = 'block';
+            document.querySelector('.game-info').style.display = 'none';
+            
+            // Show message with delay
+            setTimeout(() => {
+                messageDiv.style.display = 'block';
+                
+                // Add falling hearts animation
+                for(let i = 0; i < 50; i++) {
+                    setTimeout(() => {
+                        const heart = document.createElement('div');
+                        heart.innerHTML = '💖';
+                        heart.style.position = 'fixed';
+                        heart.style.left = Math.random() * 100 + 'vw';
+                        heart.style.top = '-50px';
+                        heart.style.fontSize = '2rem';
+                        heart.style.zIndex = '9999';
+                        heart.style.animation = `fall ${Math.random() * 2 + 2}s linear forwards`;
+                        document.body.appendChild(heart);
+                        
+                        setTimeout(() => heart.remove(), 3000);
+                    }, i * 100);
+                }
+                
+                // Add CSS for falling animation
+                const style = document.createElement('style');
+                style.textContent = `
+                    @keyframes fall {
+                        to { transform: translateY(100vh) rotate(360deg); }
+                    }
+                `;
+                document.head.appendChild(style);
+            }, 500);
         }
+        
+        // Prevent right-click
+        document.addEventListener('contextmenu', e => e.preventDefault());
     </script>
 </body>
 </html>
