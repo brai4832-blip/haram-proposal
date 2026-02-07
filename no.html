@@ -5,57 +5,169 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Always Here for You 💐</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
         body {
-            background: linear-gradient(135deg, #667eea, #764ba2);
             font-family: 'Georgia', serif;
-            color: white;
-            text-align: center;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            margin: 0;
+            text-align: center;
+            padding: 20px;
+            color: white;
         }
         .message-box {
             background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
-            padding: 50px;
+            backdrop-filter: blur(15px);
+            padding: 50px 40px;
             border-radius: 25px;
             max-width: 700px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            width: 100%;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: fadeIn 1.5s;
         }
         h1 {
-            font-size: 2.8rem;
-            margin-bottom: 20px;
+            font-size: 2.5rem;
+            margin-bottom: 25px;
             color: #ffeaa7;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
-        p {
+        .message-content {
             font-size: 1.4rem;
             line-height: 1.8;
-            margin-bottom: 25px;
+            margin-bottom: 30px;
+            text-align: left;
+            padding: 0 10px;
         }
-        .heart {
+        .heart-animation {
             font-size: 4rem;
-            animation: beat 1s infinite;
+            margin: 25px 0;
+            animation: heartbeat 1.5s infinite;
+            display: inline-block;
         }
-        @keyframes beat {
+        @keyframes heartbeat {
             0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
+            50% { transform: scale(1.2); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .signature {
+            margin-top: 40px;
+            font-size: 1.3rem;
+            font-style: italic;
+            color: #dfe6e9;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            padding-top: 20px;
+        }
+        .back-btn {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 12px 30px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: bold;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s;
+        }
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .flower {
+            font-size: 3rem;
+            margin: 10px;
+            opacity: 0.8;
+        }
+        .quote {
+            font-size: 1.2rem;
+            font-style: italic;
+            color: #fdcb6e;
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            border-left: 4px solid #fdcb6e;
         }
     </style>
 </head>
 <body>
     <div class="message-box">
-        <div class="heart">💖</div>
-        <h1>I Respect Your Feelings</h1>
-        <p>
-            Dear Haram, <br><br>
-            Thank you for being honest. Your feelings mean a lot to me, and I truly respect your choice. <br>
-            No matter what, I'll always be here for you as a friend who cares deeply. <br>
-            You are an amazing person, and I will always cherish the bond we share. <br><br>
-            With sincere love and respect, <br>
-            Forever your friend. 💐
-        </p>
+        <div class="heart-animation">💝</div>
+        <h1>With Respect and Understanding</h1>
+        
+        <div class="message-content">
+            <p>Dear Haram,</p>
+            
+            <p>Thank you for being honest with me. Your feelings mean the world to me, 
+            and I respect your decision completely. 💐</p>
+            
+            <p>What matters most to me is your happiness. Even if our paths don't lead 
+            to romance, I want you to know that I will always be here for you—as a friend 
+            who cares deeply, who supports your dreams, and who cherishes the beautiful 
+            person you are. ✨</p>
+            
+            <div class="quote">
+                "Some things are meant to be, not as we planned, but as they're meant to be."
+            </div>
+            
+            <p>You are an incredible person, and our friendship is something I truly value. 
+            I hope we can continue to share laughs, stories, and memories, just as we always have.</p>
+            
+            <p>No matter where life takes us, please remember that you have my unwavering 
+            support, my sincere respect, and a special place in my heart. ❤️</p>
+        </div>
+        
+        <div class="flowers">
+            <span class="flower">💐</span>
+            <span class="flower">🌸</span>
+            <span class="flower">🌼</span>
+            <span class="flower">🌻</span>
+        </div>
+        
+        <div class="signature">
+            With sincere love and respect,<br>
+            Always your friend... 💌
+        </div>
+        
+        <a href="index.html" class="back-btn">Back to Home</a>
     </div>
+
+    <script>
+        // Gentle fade-in effect
+        window.addEventListener('load', function() {
+            document.querySelector('.message-box').style.opacity = '0';
+            setTimeout(() => {
+                document.querySelector('.message-box').style.transition = 'opacity 1.2s';
+                document.querySelector('.message-box').style.opacity = '1';
+            }, 200);
+            
+            // Floating flowers effect
+            const flowers = document.querySelectorAll('.flower');
+            flowers.forEach((flower, index) => {
+                flower.style.animation = `float ${3 + index * 0.5}s infinite ease-in-out`;
+            });
+            
+            // Add floating animation
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes float {
+                    0%, 100% { transform: translateY(0) rotate(0deg); }
+                    50% { transform: translateY(-15px) rotate(5deg); }
+                }
+            `;
+            document.head.appendChild(style);
+        });
+    </script>
 </body>
 </html>
