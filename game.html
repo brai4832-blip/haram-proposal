@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hearts Game 💘</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #ff6b6b, #ffa8a8);
+            text-align: center;
+            font-family: 'Comic Sans MS', cursive;
+            margin: 0;
+            overflow: hidden;
+        }
+        .game-container {
+            padding: 20px;
+        }
+        h1 {
+            color: white;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+        }
+        #timer {
+            font-size: 2rem;
+            color: yellow;
+            margin: 10px;
+        }
+        #score {
+            font-size: 1.5rem;
+            color: white;
+        }
+        #hearts-container {
+            position: relative;
+            height: 70vh;
+            margin-top: 20px;
+        }
+        .heart {
+            position: absolute;
+            font-size: 2.5rem;
+            cursor: pointer;
+            user-select: none;
+            transition: transform 0.2s;
+        }
+        .heart:hover {
+            transform: scale(1.2);
+        }
+        #message {
+            display: none;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 600px;
+            margin: 30px auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        #message h2 {
+            color: #ff4d94;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>Click 10 Hearts in 10 Seconds! 💖</h1>
+        <div id="timer">Time: <span id="time">10</span>s</div>
+        <div id="score">Hearts Clicked: <span id="count">0</span> / 10</div>
+        <div id="hearts-container"></div>
+        <div id="message">
+            <h2>Yay! You did it! 🎉</h2>
+            <p style="font-size: 1.2rem;">
+                Thank you, Haram, for saying YES! <br>
+                You've just made me the happiest person in the world. <br>
+                I promise to always cherish and love you. 💕<br><br>
+                Forever yours... ❤️
+            </p>
+        </div>
+    </div>
+
+    <script>
+        const heartsContainer = document.getElementById('hearts-container');
+        const timeDisplay = document.getElementById('time');
+        const countDisplay = document.getElementById('count');
+        const messageDiv = document.getElementById('message');
+        let score = 0;
+        let timeLeft = 10;
+        let gameActive = true;
+
+        // Create floating hearts
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerHTML = '💖';
+            heart.style.left = Math.random() * 90 + '%';
+            heart.style.top = Math.random() * 80 + '%';
+            heart.onclick = () => {
+                if (!gameActive) return;
+                score++;
+                countDisplay.textContent = score;
+                heart.style.opacity = '0.5';
+                heart.style.pointerEvents = 'none';
+                if (score >= 10) {
+                    winGame();
+                }
+            };
+            heartsContainer.appendChild(heart);
+        }
+
+        // Create multiple hearts
+        for (let i = 0; i < 20; i++) {
+            createHeart();
+        }
+
+        // Timer
+        const timer = setInterval(() => {
+            timeLeft--;
+            timeDisplay.textContent = timeLeft;
+            if (timeLeft <= 0) {
+                clearInterval(timer);
+                gameActive = false;
+                if (score < 10) {
+                    alert("Time's up! Let's try again? ❤️");
+                    location.reload();
+                }
+            }
+        }, 1000);
+
+        // Win function
+        function winGame() {
+            gameActive = false;
+            clearInterval(timer);
+            document.querySelector('h1').style.display = 'none';
+            document.getElementById('timer').style.display = 'none';
+            document.getElementById('score').style.display = 'none';
+            heartsContainer.style.display = 'none';
+            messageDiv.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
