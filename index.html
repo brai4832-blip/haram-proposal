@@ -51,16 +51,116 @@
         button:hover {
             transform: scale(1.05);
         }
+        .instagram-info {
+            margin-top: 25px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #E1306C;
+        }
+        .insta-link {
+            color: #E1306C;
+            font-weight: bold;
+            text-decoration: none;
+            font-size: 1.2rem;
+            display: inline-block;
+            margin: 10px 0;
+            padding: 8px 15px;
+            background: linear-gradient(45deg, #833AB4, #E1306C, #F77737);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradient 3s ease infinite;
+        }
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .instruction {
+            font-size: 0.95rem;
+            color: #555;
+            margin-top: 10px;
+        }
+        .emoji {
+            font-size: 1.5rem;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Hi Haram! 💖</h1>
         <p style="font-size: 1.5rem; color: #555;">Would you like to be my girlfriend?</p>
+        
         <div class="options">
-            <button id="yesBtn" onclick="window.location.href='game.html'">Yes! ❤️</button>
-            <button id="noBtn" onclick="window.location.href='no.html'">No 😔</button>
+            <button id="yesBtn" onclick="sendInstagramResponse('YES')">Yes! ❤️</button>
+            <button id="noBtn" onclick="sendInstagramResponse('NO')">No 😔</button>
+        </div>
+        
+        <div class="instagram-info">
+            <div class="emoji">📱💌</div>
+            <p>After clicking, please send your answer to my Instagram:</p>
+            <a href="https://instagram.com/rai_ali_99" class="insta-link" target="_blank">
+                @rai_ali_99
+            </a>
+            <p class="instruction">
+                I'll get notified instantly when you message me on Instagram!
+            </p>
+            <p style="font-size: 0.85rem; color: #777; margin-top: 15px;">
+                <strong>Note:</strong> Your Instagram will open automatically. Just send me "YES" or "NO" in DM.
+            </p>
         </div>
     </div>
-</body>
-</html>
+
+    <script>
+        function sendInstagramResponse(answer) {
+            // Instagram username
+            const yourInstagram = "rai_ali_99";
+            
+            // 1. INSTAGRAM PROFILE OPEN
+            window.open(`https://instagram.com/${yourInstagram}`, '_blank');
+            
+            // 2. CLEAR INSTRUCTION ALERT
+            alert(`💌 IMPORTANT:\n\nPlease send me "${answer}" on Instagram DM!\n\n📱 Instagram: @${yourInstagram}\n\nI'll be waiting for your message! ❤️\n\n(After sending message, website will continue automatically)`);
+            
+            // 3. AUTO-EMAIL NOTIFICATION (BACKUP)
+            try {
+                const email = "youremail@gmail.com"; // ← APNA EMAIL DALEN YAHAN
+                const subject = `💖 Proposal Response: ${answer}`;
+                const body = `Someone clicked "${answer}" on your proposal website!%0A%0A📱 Please check Instagram DM from them.%0A⏰ Time: ${new Date().toLocaleString()}%0A🔗 Website: ${window.location.href}%0A%0AInstagram: @${yourInstagram}`;
+                
+                // Background email notification
+                setTimeout(() => {
+                    window.open(`mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`);
+                }, 300);
+            } catch(e) {
+                console.log("Email notification failed");
+            }
+            
+            // 4. REDIRECT TO NEXT PAGE AFTER DELAY
+            setTimeout(() => {
+                if(answer === 'YES') {
+                    window.location.href = 'game.html';
+                } else {
+                    window.location.href = 'no.html';
+                }
+            }, 2000); // 2 seconds delay
+            
+            // 5. SAVE RESPONSE LOCALLY (BACKUP)
+            try {
+                const responseData = {
+                    answer: answer,
+                    time: new Date().toLocaleString(),
+                    instagram: yourInstagram,
+                    timestamp: Date.now()
+                };
+                localStorage.setItem('proposal_response', JSON.stringify(responseData));
+                
+                // Also log to console for debugging
+                console.log('💌 Response logged:', responseData);
+            } catch(e) {
+                // Ignore if localStorage not available
+            }
+            
+            // 6. TRACK CLICK COUNT
+            try {
+                let clickCount = localStorage.getItem('click_count') || 0
