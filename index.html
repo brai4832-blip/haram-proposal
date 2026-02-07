@@ -66,23 +66,16 @@
             display: inline-block;
             margin: 10px 0;
             padding: 8px 15px;
-            background: linear-gradient(45deg, #833AB4, #E1306C, #F77737);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: gradient 3s ease infinite;
-        }
-        @keyframes gradient {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
         }
         .instruction {
             font-size: 0.95rem;
             color: #555;
             margin-top: 10px;
         }
-        .emoji {
-            font-size: 1.5rem;
+        .loading {
+            display: none;
+            margin-top: 20px;
+            color: #666;
         }
     </style>
 </head>
@@ -92,75 +85,75 @@
         <p style="font-size: 1.5rem; color: #555;">Would you like to be my girlfriend?</p>
         
         <div class="options">
-            <button id="yesBtn" onclick="sendInstagramResponse('YES')">Yes! ❤️</button>
-            <button id="noBtn" onclick="sendInstagramResponse('NO')">No 😔</button>
+            <button id="yesBtn" onclick="handleResponse('YES')">Yes! ❤️</button>
+            <button id="noBtn" onclick="handleResponse('NO')">No 😔</button>
+        </div>
+        
+        <div id="loading" class="loading">
+            ⏳ Processing your response...
         </div>
         
         <div class="instagram-info">
-            <div class="emoji">📱💌</div>
-            <p>After clicking, please send your answer to my Instagram:</p>
+            <p>📱 Your response will be sent to my Instagram</p>
             <a href="https://instagram.com/rai_ali_99" class="insta-link" target="_blank">
                 @rai_ali_99
             </a>
             <p class="instruction">
-                I'll get notified instantly when you message me on Instagram!
-            </p>
-            <p style="font-size: 0.85rem; color: #777; margin-top: 15px;">
-                <strong>Note:</strong> Your Instagram will open automatically. Just send me "YES" or "NO" in DM.
+                Please allow popups for this website
             </p>
         </div>
     </div>
 
     <script>
-        function sendInstagramResponse(answer) {
-            // Instagram username
-            const yourInstagram = "rai_ali_99";
+        function handleResponse(answer) {
+            // Show loading
+            document.getElementById('loading').style.display = 'block';
             
-            // 1. INSTAGRAM PROFILE OPEN
-            window.open(`https://instagram.com/${yourInstagram}`, '_blank');
-            
-            // 2. CLEAR INSTRUCTION ALERT
-            alert(`💌 IMPORTANT:\n\nPlease send me "${answer}" on Instagram DM!\n\n📱 Instagram: @${yourInstagram}\n\nI'll be waiting for your message! ❤️\n\n(After sending message, website will continue automatically)`);
-            
-            // 3. AUTO-EMAIL NOTIFICATION (BACKUP)
-            try {
-                const email = "youremail@gmail.com"; // ← APNA EMAIL DALEN YAHAN
-                const subject = `💖 Proposal Response: ${answer}`;
-                const body = `Someone clicked "${answer}" on your proposal website!%0A%0A📱 Please check Instagram DM from them.%0A⏰ Time: ${new Date().toLocaleString()}%0A🔗 Website: ${window.location.href}%0A%0AInstagram: @${yourInstagram}`;
-                
-                // Background email notification
-                setTimeout(() => {
-                    window.open(`mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`);
-                }, 300);
-            } catch(e) {
-                console.log("Email notification failed");
-            }
-            
-            // 4. REDIRECT TO NEXT PAGE AFTER DELAY
+            // 1. FIRST: Redirect IMMEDIATELY (no delay)
             setTimeout(() => {
                 if(answer === 'YES') {
                     window.location.href = 'game.html';
                 } else {
                     window.location.href = 'no.html';
                 }
-            }, 2000); // 2 seconds delay
+            }, 100); // 0.1 second delay
             
-            // 5. SAVE RESPONSE LOCALLY (BACKUP)
+            // 2. THEN: Open Instagram in background (after redirect starts)
+            setTimeout(() => {
+                window.open(`https://instagram.com/rai_ali_99`, '_blank', 'noopener,noreferrer');
+            }, 200);
+            
+            // 3. Save response locally
             try {
-                const responseData = {
-                    answer: answer,
-                    time: new Date().toLocaleString(),
-                    instagram: yourInstagram,
-                    timestamp: Date.now()
-                };
-                localStorage.setItem('proposal_response', JSON.stringify(responseData));
-                
-                // Also log to console for debugging
-                console.log('💌 Response logged:', responseData);
+                localStorage.setItem('proposal_response', answer);
+                localStorage.setItem('response_time', new Date().toISOString());
+                console.log('✅ Response saved:', answer);
             } catch(e) {
-                // Ignore if localStorage not available
+                console.log('Local storage not available');
             }
             
-            // 6. TRACK CLICK COUNT
-            try {
-                let clickCount = localStorage.getItem('click_count') || 0
+            // 4. Optional: Show simple alert (if popups blocked)
+            setTimeout(() => {
+                alert(`Thank you! 💖\n\nPlease send me "${answer}" on Instagram:\n@rai_ali_99`);
+            }, 300);
+            
+            // Disable buttons to prevent double click
+            document.getElementById('yesBtn').disabled = true;
+            document.getElementById('noBtn').disabled = true;
+        }
+        
+        // Allow popup message on page load
+        window.onload = function() {
+            // Check if buttons work
+            console.log('✅ Website loaded successfully');
+            
+            // Optional: Auto-show popup permission message
+            setTimeout(() => {
+                if(confirm("For best experience, please allow popups for this website. Click OK to continue.")) {
+                    console.log('User allowed popups');
+                }
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
